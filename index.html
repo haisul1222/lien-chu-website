@@ -325,7 +325,7 @@
         .modal-container {
             background-color: #ffffff;
             width: 100%;
-            max-width: 550px;
+            max-width: 600px;
             border-radius: 12px;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
             overflow: hidden;
@@ -398,13 +398,43 @@
             background-color: #456a6d;
         }
 
-        .modal-portfolio-img {
-            width: 100%;
-            height: auto;
+        /* 可橫向滑動圖片容器 */
+        .portfolio-gallery {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 8px;
+            margin: 10px 0 15px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .portfolio-gallery::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .portfolio-gallery::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .portfolio-gallery img {
+            flex: 0 0 85%;
+            width: 85%;
+            height: 220px;
+            object-fit: cover;
             border-radius: 8px;
-            margin-top: 8px;
-            margin-bottom: 12px;
+            scroll-snap-align: start;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .gallery-hint {
+            font-size: 0.8rem;
+            color: #0284c7;
+            text-align: right;
+            margin-top: -6px;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         /* 頁尾 Footer */
@@ -513,7 +543,6 @@
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <!-- 點選選單後左上角的圖片 -->
             <img src="IMG_4455.jpg" alt="連朱工程行 Logo" class="sidebar-logo-img">
             <button class="close-btn" onclick="toggleSidebar()">&times;</button>
         </div>
@@ -571,7 +600,7 @@
                 </div>
                 <div class="card-body">
                     <h3 class="card-title">工程作品集</h3>
-                    <p class="card-desc">實體施工案例展示，包含六月初一旗艦店裝潢、輕鋼架天花板與商業空間統包。</p>
+                    <p class="card-desc">實體施工案例展示，包含商業門市裝潢、知名品牌旗艦店與老房/平房翻修統包工程。</p>
                     <div class="card-btn">瀏覽施工案例</div>
                 </div>
             </div>
@@ -617,7 +646,6 @@
     <footer>
         <div class="footer-container">
             <div class="footer-info">
-                <!-- 底部新增的圖片 -->
                 <img src="IMG_4455.jpg" alt="連朱工程行 Logo" class="footer-logo-img">
                 <h3>連朱工程行</h3>
                 <p>專業實力 ‧ 值得信賴</p>
@@ -689,11 +717,64 @@
             portfolio: {
                 title: "🏗️ 專業作品集",
                 content: `
-                    <p style="margin-bottom: 12px;">以下為連朱工程行近期代表性施工案例：</p>
-                    <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
-                        <strong style="color: #0f172a;">【案例 A】六月初一御用團隊 旗艦店裝潢、設計統包</strong>
-                        <img src="DSC00560(2).jpg" alt="六月初一旗艦店裝潢" class="modal-portfolio-img">
-                        <p style="font-size: 0.9rem; color: #64748b;">全館整體空間設計統包與高品質輕鋼架、裝潢施作成果展示。</p>
+                    <p style="margin-bottom: 12px; color: #64748b;">連朱工程行精選代表性工程施工案例展示：</p>
+                    
+                    <!-- 案例 A -->
+                    <div style="background: #f1f5f9; padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong style="color: #0f172a; font-size: 1.05rem;">【案例 A】六月初一迪化街門市 裝潢工程</strong>
+                        <div class="gallery-hint">👉 圖片可向右滑動查看更多</div>
+                        <div class="portfolio-gallery">
+                            <img src="DSC00560(2).jpg" alt="六月初一迪化街門市 1">
+                            <img src="DSC00586.jpg" alt="六月初一迪化街門市 2">
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569;">針對六月初一迪化街門市進行整體商業空間裝潢規劃，結合輕鋼架工程與精緻質感設計，打造優雅且具品牌特色之購物環境。</p>
+                    </div>
+
+                    <!-- 案例 B -->
+                    <div style="background: #f1f5f9; padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong style="color: #0f172a; font-size: 1.05rem;">【案例 B】實心蛋捲左營店 裝潢工程</strong>
+                        <div class="gallery-hint">👉 圖片可向右滑動查看更多</div>
+                        <div class="portfolio-gallery">
+                            <img src="左營1.JPG" alt="實心蛋捲左營店 1">
+                            <img src="左營2.JPG" alt="實心蛋捲左營店 2">
+                            <img src="左營3.JPG" alt="實心蛋捲左營店 3">
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569;">實心蛋捲左營門市裝潢施作，重視動線鋪陳與細節收邊，呈現簡約現代的專賣店空間氛圍。</p>
+                    </div>
+
+                    <!-- 案例 C -->
+                    <div style="background: #f1f5f9; padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong style="color: #0f172a; font-size: 1.05rem;">【案例 C】旺來八 門市裝潢工程</strong>
+                        <div class="gallery-hint">👉 圖片可向右滑動查看更多</div>
+                        <div class="portfolio-gallery">
+                            <img src="旺來八外.jpg" alt="旺來八外觀">
+                            <img src="旺來八內.jpg" alt="旺來八內部">
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569;">包含店面門頭外觀與室內整體裝潢，精心調配視覺比例與施工品質，完美襯托品牌特色。</p>
+                    </div>
+
+                    <!-- 案例 D -->
+                    <div style="background: #f1f5f9; padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong style="color: #0f172a; font-size: 1.05rem;">【案例 D】平房翻新 裝潢工程</strong>
+                        <div class="gallery-hint">👉 圖片可向右滑動查看更多</div>
+                        <div class="portfolio-gallery">
+                            <img src="水源路1.JPG" alt="水源路平房翻新 1">
+                            <img src="水源路2.JPG" alt="水源路平房翻新 2">
+                            <img src="水源路3.JPG" alt="水源路平房翻新 3">
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569;">水源路平房結構改善與現代感室內裝潢翻新，大幅提升住宅居住品質與隔音防潮效能。</p>
+                    </div>
+
+                    <!-- 案例 E -->
+                    <div style="background: #f1f5f9; padding: 14px; border-radius: 10px; margin-bottom: 20px;">
+                        <strong style="color: #0f172a; font-size: 1.05rem;">【案例 E】老房翻新 裝潢工程</strong>
+                        <div class="gallery-hint">👉 圖片可向右滑動查看更多</div>
+                        <div class="portfolio-gallery">
+                            <img src="公益路1.JPG" alt="公益路老房翻新 1">
+                            <img src="公益路2.JPG" alt="公益路老房翻新 2">
+                            <img src="公益路3.JPG" alt="公益路老房翻新 3">
+                        </div>
+                        <p style="font-size: 0.9rem; color: #475569;">公益路老房全室翻新統包，重新配置格局與結構強化，讓老宅重獲嶄新現代活力。</p>
                     </div>
                 `
             },
