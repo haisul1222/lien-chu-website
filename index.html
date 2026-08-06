@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>連朱工程行 - 專業工程與建築服務</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* 頂部導覽列 */
+        header {
+            background-color: #ffffff;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-img {
+            height: 48px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .menu-btn {
+            background: transparent;
+            border: 2px solid #5a888c;
+            color: #5a888c;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background-color: #5a888c;
+            color: white;
+        }
+
+        /* 側邊欄遮罩與側邊欄 */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100%;
+            background-color: #0f172a;
+            color: #ffffff;
+            z-index: 201;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 25px rgba(0,0,0,0.3);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .sidebar-logo-img {
+            height: 40px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .sidebar-menu a {
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 10px 14px;
+            border-radius: 6px;
+            display: block;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover {
+            background-color: #1e293b;
+            color: #38bdf8;
+            border-left-color: #5a888c;
+            padding-left: 20px;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 4rem 1.5rem;
+            text-align: center;
+            border-bottom: 4px solid #5a888c;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 span {
+            color: #6fb3b8;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 主要內容區與圖片卡片 */
+        .main-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2.5rem;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(90, 136, 140, 0.2);
+            border-color: #6fb3b8;
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+            background-color: #1e293b;
+        }
+
+        .card-img-svg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-img-svg {
+            transform: scale(1.05);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(15, 23, 42, 0.8);
+            color: #6fb3b8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid #5a888c;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-btn {
+            background-color: #f1f5f9;
+            color: #5a888c;
+            border: 1px solid #e2e8f0;
+            padding: 10px 0;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .card:hover .card-btn {
+            background-color: #5a888c;
+            color: white;
+            border-color: #5a888c;
+        }
+
+        /* 彈出視窗 (Modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 300;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 550px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid #e2e8f0;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            background-color: #0f172a;
+            color: white;
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #5a888c;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #6fb3b8;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: white;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            color: #334155;
+            line-height: 1.7;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background-color: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            text-align: right;
+        }
+
+        .modal-action-btn {
+            background-color: #5a888c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-action-btn:hover {
+            background-color: #456a6d;
+        }
+
+        .modal-portfolio-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 頁尾 Footer */
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 3rem 1.5rem 1.5rem 1.5rem;
+            border-top: 4px solid #5a888c;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo-img {
+            height: 50px;
+            width: auto;
+            margin-bottom: 1rem;
+            display: block;
+            object-fit: contain;
+        }
+
+        .footer-info h3 {
+            color: #ffffff;
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-info p {
+            font-size: 0.95rem;
+        }
+
+        .social-title {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #e2e8f0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .social-item:hover {
+            color: #6fb3b8;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .fb-bg { background-color: #1877f2; color: white; }
+        .line-bg { background-color: #06c755; color: white; }
+        .phone-bg { background-color: #5a888c; color: white; }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #1e293b;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部導覽列 -->
+    <header>
+        <div class="header-container">
+            <a href="#">
+                <img src="IMG_4455.jpg" alt="連朱工程行 Logo" class="logo-img">
+            </a>
+            <button class="menu-btn" onclick="toggleSidebar()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                選單
+            </button>
+        </div>
+    </header>
+
+    <!-- 側邊欄與遮罩 -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <!-- 點選選單後左上角的圖片 -->
+            <img src="IMG_4455.jpg" alt="連朱工程行 Logo" class="sidebar-logo-img">
+            <button class="close-btn" onclick="toggleSidebar()">&times;</button>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="javascript:void(0)" onclick="openModal('service')">營業項目介紹</a></li>
+            <li><a href="javascript:void(0)" onclick="openModal('portfolio')">作品集</a></li>
+            <li><a href="javascript:void(0)" onclick="openModal('contact')">聯絡方式</a></li>
+            <li><a href="javascript:void(0)" onclick="openModal('about')">關於我們</a></li>
+        </ul>
+    </aside>
+
+    <!-- 主視覺 Banner -->
+    <section class="hero">
+        <h1>專業工程 ‧ <span>品質首選</span></h1>
+        <p>提供專業輕鋼架、建築修繕與各類工程解決方案，秉持誠信與精湛工藝。</p>
+    </section>
+
+    <!-- 中部圖片卡片網格 -->
+    <main class="main-container">
+        <h2 class="section-title">服務與介紹</h2>
+        <p class="section-subtitle">點擊下方卡片即可查看詳細內容</p>
+
+        <div class="card-grid">
+            <!-- 1. 營業項目介紹 -->
+            <div class="card" onclick="openModal('service')">
+                <div class="card-img-wrapper">
+                    <span class="card-badge">SERVICES</span>
+                    <svg class="card-img-svg" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="250" fill="#1e293b"/>
+                        <path d="M50 200 L120 100 L190 200 Z" fill="#5a888c" opacity="0.8"/>
+                        <path d="M150 200 L240 70 L330 200 Z" fill="#6fb3b8" opacity="0.6"/>
+                        <line x1="30" y1="200" x2="370" y2="200" stroke="#94a3b8" stroke-width="4"/>
+                        <circle cx="240" cy="70" r="6" fill="#f8fafc"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">營業項目介紹</h3>
+                    <p class="card-desc">包含輕鋼架施作、房屋修繕、防水抓漏、結構補強等全方位專業工程服務。</p>
+                    <div class="card-btn">查看營業項目</div>
+                </div>
+            </div>
+
+            <!-- 2. 作品集 -->
+            <div class="card" onclick="openModal('portfolio')">
+                <div class="card-img-wrapper">
+                    <span class="card-badge">PORTFOLIO</span>
+                    <svg class="card-img-svg" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="250" fill="#0f172a"/>
+                        <rect x="60" y="50" width="120" height="150" fill="#5a888c" rx="6"/>
+                        <rect x="200" y="80" width="140" height="120" fill="#6fb3b8" rx="6" opacity="0.8"/>
+                        <line x1="80" y1="90" x2="160" y2="90" stroke="#ffffff" stroke-width="3"/>
+                        <line x1="80" y1="120" x2="140" y2="120" stroke="#ffffff" stroke-width="3"/>
+                        <line x1="220" y1="110" x2="310" y2="110" stroke="#1e293b" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">工程作品集</h3>
+                    <p class="card-desc">實體施工案例展示，包含六月初一旗艦店裝潢、輕鋼架天花板與商業空間統包。</p>
+                    <div class="card-btn">瀏覽施工案例</div>
+                </div>
+            </div>
+
+            <!-- 3. 聯絡方式 -->
+            <div class="card" onclick="openModal('contact')">
+                <div class="card-img-wrapper">
+                    <span class="card-badge">CONTACT</span>
+                    <svg class="card-img-svg" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="250" fill="#1e293b"/>
+                        <circle cx="200" cy="110" r="45" fill="none" stroke="#5a888c" stroke-width="6"/>
+                        <path d="M200 80 L200 110 L220 130" stroke="#6fb3b8" stroke-width="5" stroke-linecap="round"/>
+                        <rect x="120" y="175" width="160" height="30" fill="#5a888c" rx="15"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">聯絡方式</h3>
+                    <p class="card-desc">提供即時免費諮詢與現場估價服務，全年無休隨時為您解答疑問。</p>
+                    <div class="card-btn">取得聯絡資訊</div>
+                </div>
+            </div>
+
+            <!-- 4. 關於我們 -->
+            <div class="card" onclick="openModal('about')">
+                <div class="card-img-wrapper">
+                    <span class="card-badge">ABOUT US</span>
+                    <svg class="card-img-svg" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="250" fill="#0f172a"/>
+                        <path d="M120 180 C120 130 160 110 280 110 C240 110 280 130 280 180" fill="none" stroke="#5a888c" stroke-width="8"/>
+                        <circle cx="200" cy="75" r="30" fill="#6fb3b8"/>
+                    </svg>
+                </div>
+                <div class="card-body">
+                    <h3 class="card-title">關於我們</h3>
+                    <p class="card-desc">深入了解連朱工程行的經營理念、專業團隊認證與堅守的品質承諾。</p>
+                    <div class="card-btn">了解團隊理念</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部 Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-info">
+                <!-- 底部新增的圖片 -->
+                <img src="IMG_4455.jpg" alt="連朱工程行 Logo" class="footer-logo-img">
+                <h3>連朱工程行</h3>
+                <p>專業實力 ‧ 值得信賴</p>
+                <p style="margin-top: 10px;"><strong>地址：</strong> 台中市神岡區厚生路97-10號</p>
+            </div>
+
+            <div>
+                <div class="social-title">官方社群與聯絡</div>
+                <div class="social-links">
+                    <div class="social-item" onclick="openModal('social_fb')">
+                        <div class="social-icon fb-bg">FB</div>
+                        <span>Facebook 粉絲專頁</span>
+                    </div>
+                    <div class="social-item" onclick="openModal('social_line')">
+                        <div class="social-icon line-bg">LINE</div>
+                        <span>LINE@ 官方帳號諮詢 (@405yldqv)</span>
+                    </div>
+                    <div class="social-item" onclick="openModal('contact')">
+                        <div class="social-icon phone-bg">TEL</div>
+                        <span>電話諮詢：04-25622198 / 0910-202077</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 連朱工程行 Lian Zhu Engineering. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- 通用彈出視窗 (Modal) -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOuterClick(event)">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">標題</div>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                內容載入中...
+            </div>
+            <div class="modal-footer">
+                <button class="modal-action-btn" onclick="closeModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 控制側邊欄開關
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // 彈出視窗資料設定
+        const modalData = {
+            service: {
+                title: "🔨 營業項目介紹",
+                content: `
+                    <p style="margin-bottom: 12px; font-weight: bold; color: #5a888c;">連朱工程行提供以下專業施工服務：</p>
+                    <ul style="padding-left: 20px; line-height: 2;">
+                        <li><strong>輕鋼架施作：</strong> 輕鋼架天花板、輕鋼架隔間工程、防火防潮天花板設計與施工。</li>
+                        <li><strong>房屋翻修與整建：</strong> 老屋翻新、室內格局重規劃、泥作工程。</li>
+                        <li><strong>防水與抓漏處理：</strong> 屋頂防水、外牆高壓注漿抓漏、浴室防水重做。</li>
+                        <li><strong>油漆與表面處置：</strong> 現代感塗料施工、工業風防水漆、壁癌處理。</li>
+                    </ul>
+                `
+            },
+            portfolio: {
+                title: "🏗️ 專業作品集",
+                content: `
+                    <p style="margin-bottom: 12px;">以下為連朱工程行近期代表性施工案例：</p>
+                    <div style="background: #f1f5f9; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                        <strong style="color: #0f172a;">【案例 A】六月初一御用團隊 旗艦店裝潢、設計統包</strong>
+                        <img src="DSC00560(2).jpg" alt="六月初一旗艦店裝潢" class="modal-portfolio-img">
+                        <p style="font-size: 0.9rem; color: #64748b;">全館整體空間設計統包與高品質輕鋼架、裝潢施作成果展示。</p>
+                    </div>
+                `
+            },
+            contact: {
+                title: "📞 聯絡方式",
+                content: `
+                    <p style="margin-bottom: 15px;">歡迎隨時與我們聯繫，我們將安排專人為您服務：</p>
+                    <p style="margin-bottom: 6px;"><strong>地址：</strong> 台中市神岡區厚生路97-10號</p>
+                    <p style="margin-bottom: 6px;"><strong>電話：</strong> 04-25622198</p>
+                    <p style="margin-bottom: 6px;"><strong>行動電話：</strong> 0910-202077</p>
+                    <p style="margin-bottom: 6px;"><strong>LINE@ ID：</strong> @405yldqv</p>
+                    <p style="margin-bottom: 6px;"><strong>電子信箱：</strong> marks941222@gmail.com</p>
+                    <p style="margin-bottom: 6px;"><strong>服務時間：</strong> 全年無休</p>
+                `
+            },
+            about: {
+                title: "🏢 關於連朱工程行",
+                content: `
+                    <p style="margin-bottom: 12px;"><strong>連朱工程行</strong> 擁有多年在地施工經驗，我們專注於輕鋼架隔間天花板、各項建築與土木工程品質。</p>
+                    <p style="margin-bottom: 12px;">我們堅持<strong>「透明報價、施工紮實、專業安全」</strong>三大核心價值，重視每一位客戶的需求，從初期場勘到後期完工驗收均嚴格把關。</p>
+                `
+            },
+            social_fb: {
+                title: "FB 粉絲專頁",
+                content: `<p>正在前往連朱工程行官方 Facebook 粉絲專頁...</p><p style="margin-top:10px; color:#64748b;">（實際發布後可直接連結至您的 FB 粉專網址）</p>`
+            },
+            social_line: {
+                title: "💬 LINE@ 官方帳號",
+                content: `
+                    <p style="margin-bottom: 10px;">請搜尋 LINE@ ID 加入官方帳號：</p>
+                    <p style="font-size: 1.2rem; font-weight: bold; color: #06c755; text-align: center; background: #f1f5f9; padding: 10px; border-radius: 8px;">@405yldqv</p>
+                    <p style="margin-top: 10px; color: #64748b;">加入後即可享有專人即時諮詢與預約現場免費估價。</p>
+                `
+            }
+        };
+
+        // 開啟彈出視窗
+        function openModal(key) {
+            const data = modalData[key];
+            if (!data) return;
+
+            document.getElementById('modalTitle').innerHTML = data.title;
+            document.getElementById('modalBody').innerHTML = data.content;
+
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.classList.add('active');
+
+            // 如果從側邊欄開啟，順便關閉側邊欄
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('active')) {
+                toggleSidebar();
+            }
+        }
+
+        // 關閉彈出視窗
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // 點擊 Modal 外部背景關閉
+        function closeModalOnOuterClick(event) {
+            if (event.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
